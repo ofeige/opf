@@ -1,4 +1,4 @@
-opf
+OPF
 ===
 
-OPF - Opf Php Framework, a very small fast framework. 
+OPF - Opf Php Framework, a very small fast framework. Based on various PHP Design Pattern
