@@ -1,0 +1,21 @@
+{
+    "name": "ofeige/opf",
+    "description": "little small oo php framework, fast in dev, fast in running",
+    "keywords": ["framework", "mvc"],
+    "authors": [
+        {
+            "name": "Oliver Feige",
+            "email": "ofeige@gmx.de"
+        }
+    ],
+    "homepage": "http://github.com/ofeige/opf",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "library/"
+        }
+    }
+}
