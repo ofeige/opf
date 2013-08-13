@@ -34,13 +34,18 @@ class AuthEventHandler implements HandlerInterface
    {
       /** check if we should do a logout */
       if ($this->request->issetParameter('auth::logout')) {
-         $this->logout();
+         $this->session->unsetParameter('auth::name');
+         $this->session->unsetParameter('auth::signin');
       }
 
+      /** first, check about security need */
+      if($event->getContext()->isProtected == false) {
+         return true;
+      }
 
       /** check if wie already logged on */
-      if ($this->session->getParameter('registered') == true &&
-         $this->session->getParameter('username') != ''
+      if ($this->session->getParameter('auth::signin') == true &&
+         $this->session->getParameter('auth::name') != ''
       ) {
          return true;
       }
@@ -60,7 +65,9 @@ class AuthEventHandler implements HandlerInterface
 //         $event = EventDispatcher::getInstance()->triggerEvent('onLoginFailed', $authEvent, array($request->getParameter('auth::username'), $request->getParameter('auth::password')));
 
 //         if($event->isCancelled() === false) {
+            $this->login->assign('action', '/?app='.$this->request->getParameter('app'));
             $this->login->assign('fieldUser', 'auth::username');
+            $this->login->assign('valueUser', $this->request->getParameter('auth::username'));
             $this->login->assign('fieldPassword', 'auth::password');
             $this->login->render($this->request, $this->response);
             $event->cancel();
@@ -68,8 +75,8 @@ class AuthEventHandler implements HandlerInterface
          return false;
       }
 
-      $this->session->setParameter('username', $this->request->getParameter('auth::username'));
-      $this->session->setParameter('registered', true);
+      $this->session->setParameter('auth::name', $this->request->getParameter('auth::username'));
+      $this->session->setParameter('auth::signin', true);
 
       return true;
    }
