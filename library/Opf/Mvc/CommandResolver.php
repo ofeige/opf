@@ -25,18 +25,20 @@ class CommandResolver implements CommandResolverInterface
     */
    public function getCommand(RequestInterface $request, ResponseInterface $response)
    {
+      $cmdName = $this->defaultCommand;
       if ($request->issetParameter('app') === true) {
          $cmdName = $request->getParameter('app');
-         $className = $this->loadCommand($cmdName);
+      }
+      /*   $className = $this->loadCommand($cmdName);
 
          $command = new $className($request, $response);
 
          if ($command instanceof CommandInterface) {
             return $command;
          }
-      }
+      }*/
 
-      $className = 'Opf\Mvc\\'.$this->loadCommand($this->defaultCommand);
+      $className = 'Opf\Mvc\\'.$this->loadCommand($cmdName);
       return new $className($request, $response);
    }
 
