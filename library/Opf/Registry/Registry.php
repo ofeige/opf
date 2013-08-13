@@ -87,7 +87,7 @@ class Registry
    /**
     * return ISession Klasse
     *
-    * @return ISession
+    * @return SessionInterface
     */
    public function getSession()
    {
