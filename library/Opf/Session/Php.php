@@ -2,44 +2,70 @@
 
 namespace Opf\Session;
 
-class Php implements SessionInterface
+class Php implements SessionInterface, \ArrayAccess
 {
-   public function __construct()
-   {
-      // Start the session suppress error if already started
-      if (session_id() == '') {
-         @session_start();
-         if (session_id() == '') {
-            throw new Exception('Cannot start session');
-         }
-      }
-   }
+    private $container;
 
-   public function issetParameter($name)
-   {
-      return isset($_SESSION[$name]);
-   }
+    public function __construct()
+    {
+        // Start the session suppress error if already started
+        if (session_id() == '') {
+            @session_start();
+            if (session_id() == '') {
+                throw new Exception('Cannot start session');
+            }
 
-   public function getParameter($name)
-   {
-      if ($this->issetParameter($name) === true) {
-         return $_SESSION[$name];
-      }
+            $this->container = & $_SESSION;
+        }
+    }
 
-      return NULL;
-   }
+    public function issetParameter($name)
+    {
+        return isset($this->container[$name]);
+    }
 
-   public function setParameter($name, $value)
-   {
-      $_SESSION[$name] = $value;
-   }
+    public function getParameter($name)
+    {
+        if ($this->issetParameter($name) === true) {
+            return $this->container[$name];
+        }
 
-   public function unsetParameter($name)
-   {
-      if ($this->issetParameter($name) === true) {
-         unset($_SESSION[$name]);
-      }
-   }
+        return NULL;
+    }
+
+    public function setParameter($name, $value)
+    {
+        $this->container[$name] = $value;
+    }
+
+    public function unsetParameter($name)
+    {
+        if ($this->issetParameter($name) === true) {
+            unset($this->container[$name]);
+        }
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        if (is_null($offset)) {
+            $this->container[] = $value;
+        } else {
+            $this->container[$offset] = $value;
+        }
+    }
+
+    public function offsetExists($offset)
+    {
+        return isset($this->container[$offset]);
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->container[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+    }
 }
-
-?>
