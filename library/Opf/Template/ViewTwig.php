@@ -5,7 +5,7 @@ namespace Opf\Template;
 use Opf\Http\RequestInterface;
 use Opf\Http\ResponseInterface;
 
-class View implements ViewInterface
+class ViewTwig implements ViewInterface
 {
 
    private $template;
