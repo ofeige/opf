@@ -24,23 +24,10 @@ class ViewTwig implements ViewInterface
 
    public function render(RequestInterface $request, ResponseInterface $response)
    {
-       $loader = new Twig_Loader_Filesystem(OPF_APPLICATION_PATH . "/views/{$this->template}.twig");
+       $loader = new Twig_Loader_Filesystem(OPF_APPLICATION_PATH . "/views/");
        $twig = new Twig_Environment($loader);
-       $data = $twig->render('Hello {{ name }}!', array('name' => 'Fabien'));
+       $data = $twig->render("{$this->template}.twig", array('name' => 'Fabien'));
        $response->write($data);
-
-
-//      ob_start();
-//
-//      $uri = OPF_APPLICATION_PATH . "/views/{$this->template}.phtml";
-//      if (file_exists($uri) === false) {
-//         throw new \Exception("File not found " . $uri);
-//      }
-//      include_once($uri);
-//
-//      $data = ob_get_clean();
-
-
    }
 
    public function __get($property)
