@@ -8,7 +8,7 @@ use Opf\Event\HandlerInterface;
 use Opf\Http\RequestInterface;
 use Opf\Http\ResponseInterface;
 use Opf\Session\SessionInterface;
-use Opf\Template\View;
+use Opf\Template\ViewInterface;
 
 class AuthEventHandler implements HandlerInterface
 {
@@ -21,7 +21,7 @@ class AuthEventHandler implements HandlerInterface
                                SessionInterface $session,
                                RequestInterface $request,
                                ResponseInterface $response,
-                               View $login)
+                               ViewInterface $login)
    {
       $this->driver = $driver;
       $this->session = $session;
