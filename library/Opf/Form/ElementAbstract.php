@@ -15,7 +15,7 @@ abstract class ElementAbstract
         $rule->setName($this->name);
         $this->rules[] = $rule;
 
-        return $rule;
+        return $this;
     }
 
     public function isValid(\Opf\Http\Request $request)
