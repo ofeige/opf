@@ -28,6 +28,9 @@ class ViewTwig implements ViewInterface
 
     public function render(RequestInterface $request, ResponseInterface $response)
     {
+        $this->assign('cmd', $request->getParameter('cmd'));
+        $this->assign('app', $request->getParameter('app'));
+
         $loader = new Twig_Loader_Filesystem(OPF_APPLICATION_PATH . "/views/");
         $twig = new Twig_Environment($loader, array('debug'=> true));
         $twig->addExtension(new \Twig_Extension_Debug());
