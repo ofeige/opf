@@ -2,6 +2,8 @@
 
 namespace Opf\Form;
 
+use Opf\Http\Request;
+
 class Form
 {
     private $elements = array();
@@ -36,6 +38,21 @@ class Form
         }
 
         return $retval;
+    }
+
+    public function getData()
+    {
+        $data = array();
+
+        foreach ($this->elements as $element) {
+            if (in_array('Opf\Form\ElementAbstract', class_parents($element)) === false) {
+                continue;
+            }
+
+            $data[$element->getName()] = $element->getValue();
+        }
+
+        return $data;
     }
 
     public function __toString()

@@ -8,7 +8,6 @@ use Opf\Form\Rules\Required;
 
 class Input extends ElementAbstract implements ElementInterface
 {
-    protected $name = '';
     protected $label = '';
 
     protected $rules = array();

@@ -8,7 +8,23 @@ abstract class ElementAbstract
 {
     protected $rules = array();
     protected $errors = array();
+    protected $name = '';
     protected $value = '';
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
 
     public function addRule(RulesAbstract $rule)
     {
