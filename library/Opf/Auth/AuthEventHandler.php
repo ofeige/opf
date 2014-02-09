@@ -56,7 +56,7 @@ class AuthEventHandler implements HandlerInterface
             return true;
         }
 
-        /** test validaton of username & passowrd */
+        /** test validaton of username & password */
         $auth = $this->driver->isValid(
             $this->request->getParameter('auth::username'),
             $this->request->getParameter('auth::password')
@@ -64,20 +64,14 @@ class AuthEventHandler implements HandlerInterface
 
         /** check if we are log in now */
         if ($auth === false) {
-//         $authEvent = new AuthEvent();
-//         $authEvent->setSuccess(false);
-//         $authEvent->setError('Username password mismatch');
-
-//         $event = EventDispatcher::getInstance()->triggerEvent('onLoginFailed', $authEvent, array($request->getParameter('auth::username'), $request->getParameter('auth::password')));
-
-//         if($event->isCancelled() === false) {
             $this->login->assign('action', '/?app=' . $this->request->getParameter('app'));
             $this->login->assign('fieldUser', 'auth::username');
             $this->login->assign('valueUser', $this->request->getParameter('auth::username'));
             $this->login->assign('fieldPassword', 'auth::password');
             $this->login->render($this->request, $this->response);
+
             $event->cancel();
-//         }
+
             return false;
         }
 
