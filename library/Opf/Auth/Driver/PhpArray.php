@@ -20,16 +20,10 @@ class PhpArray implements DriverInterface
     */
    public function isValid($username, $password)
    {
-      $i = 0;
       foreach ($this->data as $user => $pass) {
          if ($user == $username && $pass == $password) {
-            return array(
-               'user_id' => $i,
-               'username' => $user,
-               'email' => ''
-            );
+            return true;
          }
-         $i++;
       }
 
       return false;
