@@ -53,7 +53,7 @@ class Controller implements ControllerInterface
       }
 
       if(method_exists($command, $cmd) === false) {
-         throw new \Exception('There is no method "'.$cmd.'"');
+         throw new \Exception('There is no method "'.$cmd.'"', 404);
       }
 
       $command->$cmd();
