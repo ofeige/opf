@@ -1,30 +1,31 @@
 <?php
 
-namespace Opf\Form\Elements;
+    namespace Opf\Form\Elements;
 
-use Opf\Form\ElementAbstract;
-use Opf\Form\ElementInterface;
+    use Opf\Form\ElementAbstract;
+    use Opf\Form\ElementInterface;
 
-class Hidden extends ElementAbstract implements ElementInterface
-{
-    public function __construct($name)
+    class Hidden extends ElementAbstract implements ElementInterface
     {
-        $this->name = $name;
-    }
-
-    public function __toString()
-    {
-        $error = '';
-        if (count($this->errors) > 0) {
-            $error = '<p class="help-block">' . implode('<br/>', $this->errors) . '</p>';
+        public function __construct($name, $value)
+        {
+            $this->name  = $name;
+            $this->value = $value;
         }
 
-        $html = '<input type="hidden" name="%s" value="%s">';
+        public function __toString()
+        {
+            $error = '';
+            if (count($this->errors) > 0) {
+                $error = '<p class="help-block">' . implode('<br/>', $this->errors) . '</p>';
+            }
 
-        return sprintf(
-           $html,
-           $this->name,
-           $this->value
-        );
+            $html = '<input type="hidden" name="%s" value="%s">';
+
+            return sprintf(
+               $html,
+               $this->name,
+               $this->value
+            );
+        }
     }
-}
