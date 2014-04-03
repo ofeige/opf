@@ -13,7 +13,7 @@ class Password extends ElementAbstract implements ElementInterface
 
     protected $rules = array();
 
-    public function __construct($name, $label, $placeholder)
+    public function __construct($name, $label, $placeholder='')
     {
         $this->name = $name;
         $this->label = $label;
