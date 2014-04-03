@@ -17,7 +17,7 @@ class Max extends RulesAbstract
 
     public function isValid(Request $request)
     {
-        if (mb_strlen($request->getParameter($this->name)) > $this->max) {
+        if (mb_strlen($request->getParameter($this->name)) <= $this->max) {
             return true;
         }
 
