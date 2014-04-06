@@ -24,6 +24,10 @@ class Mysql implements DriverInterface
    {
        $user = \Model::factory('User')->where('email', $username)->find_one();
 
-       return password_verify($password, $user->password);
+       if($user) {
+           return password_verify($password, $user->password);
+       }
+
+       return false;
    }
 }
