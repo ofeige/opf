@@ -2,9 +2,9 @@
 
 namespace Opf\Form;
 
-use Composer\DependencyResolver\Rule;
+use Opf\Form\Rules\Required;
 
-abstract class ElementAbstract
+abstract class ElementAbstract implements ElementInputInterface
 {
     protected $rules = array();
     protected $errors = array();
@@ -26,6 +26,29 @@ abstract class ElementAbstract
         return $this->value;
     }
 
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * @param string $errorMsg
+     * @return ElementInputInterface
+     */
+    public function setRequired($errorMsg)
+    {
+        $required = new Required($errorMsg);
+        $required->setName($this->name);
+
+        $this->addRule($required);
+
+        return $this;
+    }
+
+    /**
+     * @param RulesAbstract $rule
+     * @return ElementAbstract
+     */
     public function addRule(RulesAbstract $rule)
     {
         $rule->setName($this->name);

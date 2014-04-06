@@ -8,18 +8,39 @@ class Form
 {
     private $elements = array();
 
-    public function __construct()
-    {
 
-    }
-
-    public function addElement($element)
+    /**
+     * @param ElementRenderInterface $element
+     * @return ElementRenderInterface
+     */
+    public function addElement(ElementRenderInterface $element)
     {
         $this->elements[] = $element;
+
         return $element;
     }
 
-    public function isValid(\Opf\Http\Request $request)
+    /**
+     * @param Request $request
+     * @param array $values
+     */
+    public function setInitValues(Request $request, array $values)
+    {
+        if($request->getParameter('isSend') != true) {
+            foreach ($this->elements as $element) {
+                if (in_array('Opf\Form\ElementInputInterface', class_implements($element)) === false) {
+                    continue;
+                }
+
+                if(array_key_exists($element->getName(), $values)) {
+                    $element->setValue($values[$element->getName()]);
+                }
+
+            }
+        }
+    }
+
+    public function isValid(Request $request)
     {
         $retval = true;
 
@@ -28,7 +49,7 @@ class Form
         }
 
         foreach ($this->elements as $element) {
-            if (in_array('Opf\Form\ElementAbstract', class_parents($element)) === false) {
+            if (in_array('Opf\Form\ElementInputInterface', class_implements($element)) === false) {
                 continue;
             }
 
@@ -45,7 +66,7 @@ class Form
         $data = array();
 
         foreach ($this->elements as $element) {
-            if (in_array('Opf\Form\ElementAbstract', class_parents($element)) === false) {
+            if (in_array('Opf\Form\ElementInputInterface', class_implements($element)) === false) {
                 continue;
             }
 

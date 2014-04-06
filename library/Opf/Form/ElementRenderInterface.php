@@ -2,7 +2,7 @@
 
 namespace Opf\Form;
 
-interface ElementInterface
+interface ElementRenderInterface
 {
     public function __toString();
 }

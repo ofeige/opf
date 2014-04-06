@@ -3,10 +3,10 @@
 namespace Opf\Form\Elements;
 
 use Opf\Form\ElementAbstract;
-use Opf\Form\ElementInterface;
+use Opf\Form\ElementRenderInterface;
 use Opf\Form\Rules\Required;
 
-class Password extends ElementAbstract implements ElementInterface
+class Password extends ElementAbstract implements ElementRenderInterface
 {
     protected $name = '';
     protected $label = '';
@@ -18,16 +18,6 @@ class Password extends ElementAbstract implements ElementInterface
         $this->name = $name;
         $this->label = $label;
         $this->placeholder = $placeholder;
-    }
-
-    public function setRequired($errorMsg)
-    {
-        $required = new Required($errorMsg);
-        $required->setName($this->name);
-
-        $this->addRule($required);
-
-        return $this;
     }
 
     public function __toString()
