@@ -6,7 +6,7 @@ namespace Opf\Form\Elements;
 use Opf\Form\ElementAbstract;
 use Opf\Form\ElementRenderInterface;
 
-class Button implements ElementRenderInterface
+class Button extends ElementAbstract implements ElementRenderInterface
 {
     protected $label = '';
 
