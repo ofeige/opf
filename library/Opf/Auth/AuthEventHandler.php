@@ -40,7 +40,7 @@ class AuthEventHandler implements HandlerInterface
     {
         /** check if we should do a logout */
         if ($this->request->issetParameter('auth::logout')) {
-            $this->session->unsetParameter('auth::name');
+            $this->session->unsetParameter(self::authName);
             $this->session->unsetParameter('auth::signin');
         }
 
@@ -51,22 +51,22 @@ class AuthEventHandler implements HandlerInterface
 
         /** check if wie already logged on */
         if ($this->session->getParameter('auth::signin') == true &&
-           $this->session->getParameter('auth::name') != ''
+           $this->session->getParameter(self::authName) != ''
         ) {
             return true;
         }
 
         /** test validaton of username & password */
         $auth = $this->driver->isValid(
-            $this->request->getParameter('auth::username'),
+            $this->request->getParameter(self::authName),
             $this->request->getParameter('auth::password')
         );
 
         /** check if we are log in now */
         if ($auth === false) {
             $this->login->assign('action', '/?app=' . $this->request->getParameter('app'));
-            $this->login->assign('fieldUser', 'auth::username');
-            $this->login->assign('valueUser', $this->request->getParameter('auth::username'));
+            $this->login->assign('fieldUser', self::authName);
+            $this->login->assign('valueUser', $this->request->getParameter(self::authName));
             $this->login->assign('fieldPassword', 'auth::password');
             $this->login->render($this->request, $this->response);
 
@@ -75,7 +75,7 @@ class AuthEventHandler implements HandlerInterface
             return false;
         }
 
-        $this->session->setParameter('auth::name', $this->request->getParameter('auth::username'));
+        $this->session->setParameter(self::authName, $this->request->getParameter(self::authName));
         $this->session->setParameter('auth::signin', true);
 
         return true;
