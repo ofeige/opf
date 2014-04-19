@@ -42,6 +42,8 @@ class AuthEventHandler implements HandlerInterface
         if ($this->request->issetParameter('auth::logout')) {
             $this->session->unsetParameter(self::authName);
             $this->session->unsetParameter('auth::signin');
+
+            session_destroy();
         }
 
         /** first, check about security need */
