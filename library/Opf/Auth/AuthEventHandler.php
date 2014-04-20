@@ -17,51 +17,55 @@ class AuthEventHandler implements HandlerInterface
     protected $request;
     protected $response;
 
-    const authName = 'auth::username';
+    const authName   = 'auth::username';
     const authPassword = 'auth::password';
     const authLogout = 'auth::logout';
-
+    const authSignin = 'auth::signin';
 
     public function __construct(
-        DriverInterface $driver,
-        SessionInterface $session,
-        RequestInterface $request,
-        ResponseInterface $response,
-        ViewInterface $login
-    ) {
+       DriverInterface $driver,
+       SessionInterface $session,
+       RequestInterface $request,
+       ResponseInterface $response,
+       ViewInterface $login
+    )
+    {
         $this->driver = $driver;
         $this->session = $session;
         $this->request = $request;
         $this->response = $response;
-        $this->login = $login;
+        $this->login  = $login;
     }
 
     public function handle(Event $event)
     {
         /** check if we should do a logout */
-        if ($this->request->issetParameter('auth::logout')) {
+        if ($this->request->issetParameter(self::authLogout)) {
             $this->session->unsetParameter(self::authName);
-            $this->session->unsetParameter('auth::signin');
-
-            session_destroy();
+            $this->session->unsetParameter(self::authSignin);
         }
 
-        /** first, check about security need */
-        if ($event->getContext()->isProtected == false) {
+        /**
+         * $acl === false        <= no security
+         * $acl === array()      <= security, but only signed-in
+         * $acl === array('xx')  <= signed-in and user has role 'xx'
+         */
+        if (($acl = $event->getContext()->getAcl()) === false) {
             return true;
         }
 
         /** check if wie already logged on */
-        if ($this->session->getParameter('auth::signin') == true &&
+        if ($this->session->getParameter(self::authSignin) == true &&
            $this->session->getParameter(self::authName) != ''
         ) {
             return true;
         }
 
-        /** test validaton of username & password */
+        /** test validation of username & password */
         $auth = $this->driver->isValid(
-            $this->request->getParameter(self::authName),
-            $this->request->getParameter('auth::password')
+                             $this->request->getParameter(self::authName),
+                             $this->request->getParameter(self::authPassword),
+                             $acl
         );
 
         /** check if we are log in now */
@@ -69,7 +73,7 @@ class AuthEventHandler implements HandlerInterface
             $this->login->assign('action', '/?app=' . $this->request->getParameter('app'));
             $this->login->assign('fieldUser', self::authName);
             $this->login->assign('valueUser', $this->request->getParameter(self::authName));
-            $this->login->assign('fieldPassword', 'auth::password');
+            $this->login->assign('fieldPassword', self::authPassword);
             $this->login->render($this->request, $this->response);
 
             $event->cancel();
@@ -78,7 +82,7 @@ class AuthEventHandler implements HandlerInterface
         }
 
         $this->session->setParameter(self::authName, $this->request->getParameter(self::authName));
-        $this->session->setParameter('auth::signin', true);
+        $this->session->setParameter(self::authSignin, true);
 
         return true;
     }
