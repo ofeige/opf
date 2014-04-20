@@ -11,7 +11,7 @@ abstract class CommandAbstract implements CommandInterface
 {
     protected $request;
     protected $response;
-    protected $aclGroup = false;
+    protected $roles = false;
 
     public function __construct(RequestInterface $request, ResponseInterface $response)
     {
@@ -25,9 +25,9 @@ abstract class CommandAbstract implements CommandInterface
         }
     }
 
-    public function getAcl()
+    public function getRoles()
     {
-        return $this->aclGroup;
+        return $this->roles;
     }
 
     abstract function main();

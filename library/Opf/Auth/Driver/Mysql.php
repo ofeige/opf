@@ -40,16 +40,16 @@ class Mysql implements DriverInterface
      * @param string $username
      * @return array
      */
-    public function getGroups($username)
+    public function getRoles($username)
     {
-        $groups = \Model::factory($this->modelName)->select('group.name')
-                        ->left_outer_join('user_has_group', array('user.id', '=', 'user_has_group.user_id'))
-                        ->left_outer_join('group', array('user_has_group.group_id', '=', 'group.id'))
+        $roles = \Model::factory($this->modelName)->select('role.name')
+                        ->left_outer_join('user_has_role', array('user.id', '=', 'user_has_role.user_id'))
+                        ->left_outer_join('role', array('user_has_role.role_id', '=', 'role.id'))
                         ->where('email', $username)->find_array();
 
         $array = array();
-        foreach ($groups as $group) {
-            $array[] = $group['name'];
+        foreach ($roles as $role) {
+            $array[] = $role['name'];
         }
 
         return $array;

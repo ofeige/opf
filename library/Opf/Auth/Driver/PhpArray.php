@@ -17,7 +17,7 @@ class PhpArray implements DriverInterface
      * @param array $group A list of group names to validate the User
      * @return bool
      *
-     * @todo    implement the group feature for php arrays
+     * @todo    implement the role feature for phpArrays
      */
     public function isValid($username, $password, array $group = array())
     {
@@ -28,5 +28,15 @@ class PhpArray implements DriverInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param string $username
+     * @return array
+     * @todo    implement getRoles correct for phpArrays
+     */
+    public function getRoles($username)
+    {
+
     }
 }

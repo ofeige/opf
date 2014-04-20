@@ -16,7 +16,7 @@ interface DriverInterface
      * @param string $username
      * @return array
      */
-    public function getGroups($username);
+    public function getRoles($username);
 }
 
 ?>

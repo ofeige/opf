@@ -21,7 +21,7 @@ class AuthEventHandler implements HandlerInterface
     const authPassword = 'auth::password';
     const authLogout   = 'auth::logout';
     const authSignin   = 'auth::signin';
-    const authRole     = 'auth::role';
+    const authRoles    = 'auth::roles';
 
     public function __construct(
        DriverInterface $driver,
@@ -49,18 +49,18 @@ class AuthEventHandler implements HandlerInterface
         }
 
         /**
-         * $acl === false        <= no security
-         * $acl === array()      <= security, but only signed-in
-         * $acl === array('xx')  <= signed-in and user has role 'xx'
+         * $roles === false        <= no security
+         * $roles === array()      <= security, but only signed-in
+         * $roles === array('xx')  <= signed-in and user has role 'xx'
          */
-        if (($acl = $event->getContext()->getAcl()) === false) {
+        if (($roles = $event->getContext()->getRoles()) === false) {
             return true;
         }
 
         /** check if user is already logged in, and no role is needed */
         if ($this->session->getParameter(self::authSignin) == true &&
            $this->session->getParameter(self::authName) != '' &&
-           count($acl) == 0
+           count($roles) == 0
         ) {
             return true;
         }
@@ -68,10 +68,10 @@ class AuthEventHandler implements HandlerInterface
         /** check if user is already logged in, and role is needed */
         if ($this->session->getParameter(self::authSignin) == true &&
            $this->session->getParameter(self::authName) != '' &&
-           count($acl) > 0 &&
+           count($roles) > 0 &&
            count(array_intersect(
-                    $this->session->getParameter(self::authRole),
-                    $acl)) > 0
+                    $this->session->getParameter(self::authRoles),
+                    $roles)) > 0
         ) {
             return true;
         }
@@ -80,7 +80,7 @@ class AuthEventHandler implements HandlerInterface
         $auth = $this->driver->isValid(
                              $this->request->getParameter(self::authName),
                              $this->request->getParameter(self::authPassword),
-                             $acl
+                             $roles
         );
 
         /** check if we are log in now */
@@ -98,8 +98,8 @@ class AuthEventHandler implements HandlerInterface
 
         $this->session->setParameter(self::authName, $this->request->getParameter(self::authName));
         $this->session->setParameter(self::authSignin, true);
-        $this->session->setParameter(self::authRole,
-                                     $this->driver->getGroups($this->request->getParameter(self::authName)));
+        $this->session->setParameter(self::authRoles,
+                                     $this->driver->getRoles($this->request->getParameter(self::authName)));
 
         return true;
     }
