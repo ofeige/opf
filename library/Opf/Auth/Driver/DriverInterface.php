@@ -4,14 +4,15 @@ namespace Opf\Auth\Driver;
 
 interface DriverInterface
 {
-   /**
-    * Prüft ob $username und $password stimmen
-    *
-    * @param string $username
-    * @param string $password
-    * @return bool
-    */
-   public function isValid($username, $password);
+    /**
+     * @param string $username
+     * @param string $password
+     * @param array $group A list of group names to validate the User
+     * @return bool
+     *
+     * @todo    implement the group feature for php arrays
+     */
+    public function isValid($username, $password, array $group = array());
 }
 
 ?>
