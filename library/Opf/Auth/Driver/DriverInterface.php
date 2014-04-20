@@ -11,6 +11,12 @@ interface DriverInterface
      * @return bool
      */
     public function isValid($username, $password, array $group = array());
+
+    /**
+     * @param string $username
+     * @return array
+     */
+    public function getGroups($username);
 }
 
 ?>
