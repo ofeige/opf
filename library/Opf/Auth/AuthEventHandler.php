@@ -17,10 +17,11 @@ class AuthEventHandler implements HandlerInterface
     protected $request;
     protected $response;
 
-    const authName   = 'auth::username';
+    const authName     = 'auth::username';
     const authPassword = 'auth::password';
-    const authLogout = 'auth::logout';
-    const authSignin = 'auth::signin';
+    const authLogout   = 'auth::logout';
+    const authSignin   = 'auth::signin';
+    const authRole     = 'auth::role';
 
     public function __construct(
        DriverInterface $driver,
@@ -30,11 +31,11 @@ class AuthEventHandler implements HandlerInterface
        ViewInterface $login
     )
     {
-        $this->driver = $driver;
-        $this->session = $session;
-        $this->request = $request;
+        $this->driver   = $driver;
+        $this->session  = $session;
+        $this->request  = $request;
         $this->response = $response;
-        $this->login  = $login;
+        $this->login    = $login;
     }
 
     public function handle(Event $event)
@@ -43,6 +44,8 @@ class AuthEventHandler implements HandlerInterface
         if ($this->request->issetParameter(self::authLogout)) {
             $this->session->unsetParameter(self::authName);
             $this->session->unsetParameter(self::authSignin);
+
+            session_destroy();
         }
 
         /**
@@ -54,9 +57,21 @@ class AuthEventHandler implements HandlerInterface
             return true;
         }
 
-        /** check if wie already logged on */
+        /** check if user is already logged in, and no role is needed */
         if ($this->session->getParameter(self::authSignin) == true &&
-           $this->session->getParameter(self::authName) != ''
+           $this->session->getParameter(self::authName) != '' &&
+           count($acl) == 0
+        ) {
+            return true;
+        }
+
+        /** check if user is already logged in, and role is needed */
+        if ($this->session->getParameter(self::authSignin) == true &&
+           $this->session->getParameter(self::authName) != '' &&
+           count($acl) > 0 &&
+           count(array_intersect(
+                    $this->session->getParameter(self::authRole),
+                    $acl)) > 0
         ) {
             return true;
         }
@@ -83,6 +98,8 @@ class AuthEventHandler implements HandlerInterface
 
         $this->session->setParameter(self::authName, $this->request->getParameter(self::authName));
         $this->session->setParameter(self::authSignin, true);
+        $this->session->setParameter(self::authRole,
+                                     $this->driver->getGroups($this->request->getParameter(self::authName)));
 
         return true;
     }

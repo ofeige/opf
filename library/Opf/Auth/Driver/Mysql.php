@@ -4,19 +4,19 @@ namespace Opf\Auth\Driver;
 
 class Mysql implements DriverInterface
 {
-   protected $modelName;
+    protected $modelName;
 
-   public function __construct($modelName)
-   {
-      $this->modelName = $modelName;
-   }
+    public function __construct($modelName)
+    {
+        $this->modelName = $modelName;
+    }
 
-   /**
-    * @param string $username
-    * @param string $password
-    * @param array $group A list of group names to validate the User
-    * @return bool
-    */
+    /**
+     * @param string $username
+     * @param string $password
+     * @param array $group A list of group names to validate the User
+     * @return bool
+     */
     public function isValid($username, $password, array $group = array())
     {
         if (count($group) > 0) {
@@ -33,6 +33,25 @@ class Mysql implements DriverInterface
             return password_verify($password, $user->password);
         }
 
-       return false;
-   }
+        return false;
+    }
+
+    /**
+     * @param string $username
+     * @return array
+     */
+    public function getGroups($username)
+    {
+        $groups = \Model::factory($this->modelName)->select('group.name')
+                        ->left_outer_join('user_has_group', array('user.id', '=', 'user_has_group.user_id'))
+                        ->left_outer_join('group', array('user_has_group.group_id', '=', 'group.id'))
+                        ->where('email', $username)->find_array();
+
+        $array = array();
+        foreach ($groups as $group) {
+            $array[] = $group['name'];
+        }
+
+        return $array;
+    }
 }
