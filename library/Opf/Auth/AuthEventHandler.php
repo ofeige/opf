@@ -30,11 +30,11 @@ class AuthEventHandler implements HandlerInterface
        ViewInterface $login
     )
     {
-        $this->driver = $driver;
+        $this->driver  = $driver;
         $this->session = $session;
         $this->request = $request;
         $this->response = $response;
-        $this->login  = $login;
+        $this->login   = $login;
     }
 
     public function handle(Event $event)
@@ -43,6 +43,8 @@ class AuthEventHandler implements HandlerInterface
         if ($this->request->issetParameter(self::authLogout)) {
             $this->session->unsetParameter(self::authName);
             $this->session->unsetParameter(self::authSignin);
+
+            session_destroy();
         }
 
         /**
