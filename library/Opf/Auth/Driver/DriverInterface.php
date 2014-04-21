@@ -7,10 +7,10 @@ interface DriverInterface
     /**
      * @param string $username
      * @param string $password
-     * @param array $group A list of group names to validate the User
+     * @param array $role A list of group names to validate the User
      * @return bool
      */
-    public function isValid($username, $password, array $group = array());
+    public function isValid($username, $password, array $role = array());
 
     /**
      * @param string $username
