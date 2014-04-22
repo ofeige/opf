@@ -2,6 +2,7 @@
 
 namespace Opf\Mvc;
 
+use Opf\Exception\FileNotFoundException;
 use Opf\Http\RequestInterface;
 use Opf\Http\ResponseInterface;
 
@@ -32,7 +33,11 @@ class CommandResolver implements CommandResolverInterface
 
       $className = 'Opf\Mvc\\'.$this->loadCommand($cmdName);
 
-      return new $className($request, $response);
+       if (class_exists($className) == false) {
+           throw new ClassNotFoundException('Class "' . $className . '" not found', 404);
+       }
+
+       return new $className($request, $response);
    }
 
    protected function loadCommand($cmdName)
@@ -40,7 +45,11 @@ class CommandResolver implements CommandResolverInterface
       $class = $cmdName;
       $file = $this->path . '/commands/' . $cmdName . '.php';
 
-      include_once($file);
+       if (!file_exists($file)) {
+           throw new FileNotFoundException('File "' . $file . '" not found', 404);
+       }
+
+       include_once($file);
 
       return $class;
    }
