@@ -14,12 +14,12 @@ class PhpArray implements DriverInterface
     /**
      * @param string $username
      * @param string $password
-     * @param array $group A list of group names to validate the User
+     * @param array $role A list of group names to validate the User
      * @return bool
      *
-     * @todo    implement the group feature for php arrays
+     * @todo    implement the role feature for phpArrays
      */
-    public function isValid($username, $password, array $group = array())
+    public function isValid($username, $password, array $role = array())
     {
         foreach ($this->data as $user => $pass) {
             if ($user == $username && $pass == $password) {
@@ -28,5 +28,15 @@ class PhpArray implements DriverInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param string $username
+     * @return array
+     * @todo    implement getRoles correct for phpArrays
+     */
+    public function getRoles($username)
+    {
+
     }
 }

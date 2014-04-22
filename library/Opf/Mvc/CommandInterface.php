@@ -11,5 +11,5 @@ interface CommandInterface
 
     public function main();
 
-    public function getAcl();
+    public function getRoles();
 }
