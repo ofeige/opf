@@ -12,11 +12,15 @@ class Min extends RulesAbstract
     public function __construct($errorMsg, $min)
     {
         $this->errorMsg = $errorMsg;
-        $this->min = $min;
+        $this->min      = $min;
     }
 
     public function isValid(Request $request)
     {
+        if ($request->getParameter($this->name) == '') {
+            return true;
+        }
+
         if (mb_strlen($request->getParameter($this->name)) >= $this->min) {
             return true;
         }
