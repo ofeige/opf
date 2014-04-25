@@ -5,7 +5,6 @@ namespace Opf\Form\Elements;
 use Opf\Form\ElementAbstract;
 use Opf\Form\ElementInputInterface;
 use Opf\Form\ElementRenderInterface;
-use Opf\Form\Rules\Required;
 
 class Input extends ElementAbstract implements ElementRenderInterface, ElementInputInterface
 {
@@ -13,10 +12,10 @@ class Input extends ElementAbstract implements ElementRenderInterface, ElementIn
 
     protected $rules = array();
 
-    public function __construct($name, $label, $placeholder='')
+    public function __construct($name, $label, $placeholder = '')
     {
-        $this->name = $name;
-        $this->label = $label;
+        $this->name        = $name;
+        $this->label       = $label;
         $this->placeholder = $placeholder;
     }
 

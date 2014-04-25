@@ -4,7 +4,6 @@ namespace Opf\Form\Elements;
 
 use Opf\Form\ElementAbstract;
 use Opf\Form\ElementRenderInterface;
-use Opf\Form\Rules\Required;
 
 class Password extends ElementAbstract implements ElementRenderInterface
 {
@@ -13,10 +12,10 @@ class Password extends ElementAbstract implements ElementRenderInterface
 
     protected $rules = array();
 
-    public function __construct($name, $label, $placeholder='')
+    public function __construct($name, $label, $placeholder = '')
     {
-        $this->name = $name;
-        $this->label = $label;
+        $this->name        = $name;
+        $this->label       = $label;
         $this->placeholder = $placeholder;
     }
 

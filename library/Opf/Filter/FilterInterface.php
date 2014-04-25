@@ -7,7 +7,7 @@ use Opf\Http\ResponseInterface;
 
 interface FilterInterface
 {
-   public function execute(RequestInterface $request, ResponseInterface $response);
+    public function execute(RequestInterface $request, ResponseInterface $response);
 }
 
 ?>

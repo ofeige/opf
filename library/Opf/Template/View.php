@@ -8,67 +8,67 @@ use Opf\Http\ResponseInterface;
 class View implements ViewInterface
 {
 
-   private $template;
-   private $vars = array();
-   private $helpers = array();
+    private $template;
+    private $vars = array();
+    private $helpers = array();
 
-   public function __construct($template)
-   {
-      $this->template = $template;
-   }
+    public function __construct($template)
+    {
+        $this->template = $template;
+    }
 
-   public function assign($name, $value)
-   {
-      $this->vars[$name] = $value;
-   }
+    public function assign($name, $value)
+    {
+        $this->vars[$name] = $value;
+    }
 
-   public function render(RequestInterface $request, ResponseInterface $response)
-   {
-      ob_start();
+    public function render(RequestInterface $request, ResponseInterface $response)
+    {
+        ob_start();
 
-      $uri = OPF_APPLICATION_PATH . "/views/{$this->template}.phtml";
-      if (file_exists($uri) === false) {
-         throw new \Exception("File not found " . $uri);
-      }
-      include_once($uri);
+        $uri = OPF_APPLICATION_PATH . "/views/{$this->template}.phtml";
+        if (file_exists($uri) === false) {
+            throw new \Exception("File not found " . $uri);
+        }
+        include_once($uri);
 
-      $data = ob_get_clean();
+        $data = ob_get_clean();
 
-      $response->write($data);
-   }
+        $response->write($data);
+    }
 
-   public function __get($property)
-   {
-      if (isset($this->vars[$property])) {
-         return $this->vars[$property];
-      }
+    public function __get($property)
+    {
+        if (isset($this->vars[$property])) {
+            return $this->vars[$property];
+        }
 
-      return null;
-   }
+        return null;
+    }
 
-   public function __call($methodName, $args)
-   {
-      $helper = $this->loadViewHelper($methodName);
-      $val = $helper->execute($args);
+    public function __call($methodName, $args)
+    {
+        $helper = $this->loadViewHelper($methodName);
+        $val    = $helper->execute($args);
 
-      return $val;
-   }
+        return $val;
+    }
 
-   protected function loadViewHelper($helper)
-   {
-      $helperName = ucfirst($helper);
-      if (!isset($this->helpers[$helper])) {
-         $className = "{$helperName}";
-         $fileName = OPF_APPLICATION_PATH . "/views/helpers/{$className}.php";
-         if (file_exists($fileName) === false) {
-            throw new \Exception("File not found {$fileName}");
-         }
-         include_once $fileName;
-         $this->helpers[$helper] = new $className();
-      }
+    protected function loadViewHelper($helper)
+    {
+        $helperName = ucfirst($helper);
+        if (!isset($this->helpers[$helper])) {
+            $className = "{$helperName}";
+            $fileName  = OPF_APPLICATION_PATH . "/views/helpers/{$className}.php";
+            if (file_exists($fileName) === false) {
+                throw new \Exception("File not found {$fileName}");
+            }
+            include_once $fileName;
+            $this->helpers[$helper] = new $className();
+        }
 
-      return $this->helpers[$helper];
-   }
+        return $this->helpers[$helper];
+    }
 }
 
 ?>

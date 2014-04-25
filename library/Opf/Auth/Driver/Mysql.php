@@ -43,9 +43,9 @@ class Mysql implements DriverInterface
     public function getRoles($username)
     {
         $roles = \Model::factory($this->modelName)->select('role.name')
-                        ->left_outer_join('user_has_role', array('user.id', '=', 'user_has_role.user_id'))
-                        ->left_outer_join('role', array('user_has_role.role_id', '=', 'role.id'))
-                        ->where('email', $username)->find_array();
+                       ->left_outer_join('user_has_role', array('user.id', '=', 'user_has_role.user_id'))
+                       ->left_outer_join('role', array('user_has_role.role_id', '=', 'role.id'))
+                       ->where('email', $username)->find_array();
 
         $array = array();
         foreach ($roles as $role) {

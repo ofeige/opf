@@ -23,8 +23,7 @@ class ExceptionTester extends RulesAbstract
             call_user_func($cb, $request->getParameter($this->name));
 
             return true;
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }

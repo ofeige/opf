@@ -4,9 +4,8 @@ namespace Opf\Template;
 
 use Opf\Http\RequestInterface;
 use Opf\Http\ResponseInterface;
-use Twig_Loader_Filesystem;
 use Twig_Environment;
-
+use Twig_Loader_Filesystem;
 
 
 class ViewTwig implements ViewInterface
@@ -32,7 +31,7 @@ class ViewTwig implements ViewInterface
         $this->assign('app', $request->getParameter('app'));
 
         $loader = new Twig_Loader_Filesystem(OPF_APPLICATION_PATH . "/views/");
-        $twig = new Twig_Environment($loader, array('debug'=> true));
+        $twig   = new Twig_Environment($loader, array('debug' => true));
         $twig->addExtension(new \Twig_Extension_Debug());
         $data = $twig->render("{$this->template}.twig", $this->vars);
         $response->write($data);
@@ -50,7 +49,7 @@ class ViewTwig implements ViewInterface
     public function __call($methodName, $args)
     {
         $helper = $this->loadViewHelper($methodName);
-        $val = $helper->execute($args);
+        $val    = $helper->execute($args);
 
         return $val;
     }
@@ -60,7 +59,7 @@ class ViewTwig implements ViewInterface
         $helperName = ucfirst($helper);
         if (!isset($this->helpers[$helper])) {
             $className = "{$helperName}";
-            $fileName = OPF_APPLICATION_PATH . "/views/helpers/{$className}.php";
+            $fileName  = OPF_APPLICATION_PATH . "/views/helpers/{$className}.php";
             if (file_exists($fileName) === false) {
                 throw new \Exception("File not found {$fileName}");
             }

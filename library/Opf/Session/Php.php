@@ -30,7 +30,7 @@ class Php implements SessionInterface, \ArrayAccess
             return $this->container[$name];
         }
 
-        return NULL;
+        return null;
     }
 
     public function setParameter($name, $value)

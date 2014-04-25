@@ -2,10 +2,10 @@
 
 namespace Opf\Mvc;
 
+use Opf\Event\Dispatcher;
 use Opf\Event\Event;
 use Opf\Http\RequestInterface;
 use Opf\Http\ResponseInterface;
-use Opf\Event\Dispatcher;
 
 abstract class CommandAbstract implements CommandInterface
 {

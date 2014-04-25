@@ -26,13 +26,13 @@ class Form
      */
     public function setInitValues(Request $request, array $values)
     {
-        if($request->getParameter('isSend') != true) {
+        if ($request->getParameter('isSend') != true) {
             foreach ($this->elements as $element) {
                 if (in_array('Opf\Form\ElementInputInterface', class_implements($element)) === false) {
                     continue;
                 }
 
-                if(array_key_exists($element->getName(), $values)) {
+                if (array_key_exists($element->getName(), $values)) {
                     $element->setValue($values[$element->getName()]);
                 }
 

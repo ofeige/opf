@@ -5,6 +5,7 @@ namespace Opf\Form;
 interface ElementInputInterface
 {
     public function getName();
+
     public function getValue();
 
     /**

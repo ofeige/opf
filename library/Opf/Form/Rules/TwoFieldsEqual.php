@@ -19,7 +19,7 @@ class TwoFieldsEqual extends RulesAbstract
 
     public function __construct($errorMsg, $nameSecondField)
     {
-        $this->errorMsg = $errorMsg;
+        $this->errorMsg        = $errorMsg;
         $this->nameSecondField = $nameSecondField;
     }
 

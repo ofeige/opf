@@ -12,7 +12,7 @@ class Max extends RulesAbstract
     public function __construct($errorMsg, $max)
     {
         $this->errorMsg = $errorMsg;
-        $this->max = $max;
+        $this->max      = $max;
     }
 
     public function isValid(Request $request)

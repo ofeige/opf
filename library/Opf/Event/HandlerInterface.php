@@ -4,5 +4,5 @@ namespace Opf\Event;
 
 interface HandlerInterface
 {
-   public function handle(Event $event);
+    public function handle(Event $event);
 }

@@ -64,7 +64,7 @@ abstract class ElementAbstract implements ElementInputInterface
         $isValid = true;
         foreach ($this->rules as $rule) {
             if ($rule->isValid($request) === false) {
-                $isValid = false;
+                $isValid        = false;
                 $this->errors[] = $rule->getErrorMsg();
             }
         }
