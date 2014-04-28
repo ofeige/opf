@@ -3,6 +3,7 @@
 namespace Opf\Form;
 
 use Opf\Http\Request;
+use Opf\Http\RequestInterface;
 
 class Form
 {
@@ -24,7 +25,7 @@ class Form
      * @param Request $request
      * @param array $values
      */
-    public function setInitValues(Request $request, array $values)
+    public function setInitValues(RequestInterface $request, array $values)
     {
         if ($request->getParameter('isSend') != true) {
             foreach ($this->elements as $element) {
