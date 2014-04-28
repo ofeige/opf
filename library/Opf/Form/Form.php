@@ -2,7 +2,6 @@
 
 namespace Opf\Form;
 
-use Opf\Http\Request;
 use Opf\Http\RequestInterface;
 
 class Form
@@ -22,7 +21,7 @@ class Form
     }
 
     /**
-     * @param Request $request
+     * @param RequestInterface $request
      * @param array $values
      */
     public function setInitValues(RequestInterface $request, array $values)
@@ -41,7 +40,7 @@ class Form
         }
     }
 
-    public function isValid(Request $request)
+    public function isValid(RequestInterface $request)
     {
         $retval = true;
 
