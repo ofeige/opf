@@ -17,6 +17,11 @@ class FileUploadType extends RulesAbstract
 
     public function isValid(Request $request)
     {
+        /** ok when there is no file */
+        if (isset($_FILES[$this->name]) && $_FILES[$this->name]['error'] == UPLOAD_ERR_NO_FILE) {
+            return true;
+        }
+
         if (isset($_FILES[$this->name]) && $_FILES[$this->name]['error'] == UPLOAD_ERR_OK) {
 
             /** test all possible images was compiled into php */

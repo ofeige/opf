@@ -79,7 +79,7 @@ class Form
 
     public function __toString()
     {
-        $str = '<form class="form-horizontal" role="form" method="post" action=""><input type="hidden" name="isSend" value="true">';
+        $str = '<form enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action=""><input type="hidden" name="isSend" value="true">';
 
         foreach ($this->elements as $element) {
             $str .= $element;

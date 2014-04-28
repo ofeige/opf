@@ -18,7 +18,7 @@ class FileUploadSize extends RulesAbstract
     public function isValid(Request $request)
     {
         /** ok when there is no file */
-        if (isset($_FILES[$this->name]) && $_FILES[$this->name]['error'] !== UPLOAD_ERR_OK) {
+        if (isset($_FILES[$this->name]) && $_FILES[$this->name]['error'] == UPLOAD_ERR_NO_FILE) {
             return true;
         }
 
