@@ -3,30 +3,14 @@
 namespace Opf\Mvc;
 
 use Opf\Filter\Chain;
+use Opf\Filter\FilterInterface;
 use Opf\Http\RequestInterface;
 use Opf\Http\ResponseInterface;
 
 class Controller implements ControllerInterface
 {
-    /**
-     * ICommandResolver Klasse
-     *
-     * @var ICommandResolver
-     */
     private $resolver;
-
-    /**
-     * FilterChain Klasse
-     *
-     * @var FilterChain
-     */
     private $preFilters;
-
-    /**
-     * FilterChain Klasse
-     *
-     * @var FilterChain
-     */
     private $postFilters;
 
     public function __construct(CommandResolverInterface $resolver)
@@ -62,12 +46,12 @@ class Controller implements ControllerInterface
         $response->flush();
     }
 
-    public function addPreFilter(IFilter $filter)
+    public function addPreFilter(FilterInterface $filter)
     {
         $this->preFilters->addFilter($filter);
     }
 
-    public function addPostFilter(IFilter $filter)
+    public function addPostFilter(FilterInterface $filter)
     {
         $this->postFilters->addFilter($filter);
     }

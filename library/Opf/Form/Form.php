@@ -2,75 +2,92 @@
 
 namespace Opf\Form;
 
-use Opf\Http\RequestInterface;
+use Opf\Exception\FormGenerationException;
+use Opf\Form\Elements\ElementInterface;
 
 class Form
 {
-    private $elements = array();
+    protected $elements = array();
+    protected $data = array();
 
-
-    /**
-     * @param ElementRenderInterface $element
-     * @return ElementRenderInterface
-     */
-    public function addElement(ElementRenderInterface $element)
+    public function addElement($name, ElementInterface $element)
     {
-        $this->elements[] = $element;
+        if (isset($this->elements[$name])) {
+            throw new FormGenerationException("Element with name $name is already used");
+        }
+
+        $element->setName($name);
+        $this->elements[$name] = $element;
 
         return $element;
     }
 
     /**
-     * @param RequestInterface $request
+     * @param $name                    String with the searched element name
+     * @return ElementInterface        Return the searched element
+     * @throws FormGenerationException
+     */
+    public function getElement($name)
+    {
+        if (isset($this->elements[$name]) == false) {
+            throw new FormGenerationException("Element with name $name not found");
+        }
+
+        return $this->elements[$name];
+    }
+
+    /**
+     * @param array $data the POST or GET Data with the user input
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+    }
+
+    /**
+     * Set default values to the form, only when the form ist not posted
      * @param array $values
      */
-    public function setInitValues(RequestInterface $request, array $values)
+    public function setInitValues(array $values)
     {
-        if ($request->getParameter('isSend') != true) {
-            foreach ($this->elements as $element) {
-                if (in_array('Opf\Form\ElementInputInterface', class_implements($element)) === false) {
-                    continue;
+        if (isset($this->data['isSend']) == false || $this->data['isSend'] != true) {
+            foreach ($this->elements as $name => $element) {
+                if ($element instanceof ElementInterface) {
+                    if (array_key_exists($name, $values)) {
+                        $element->setValue($values[$name]);
+                    }
                 }
-
-                if (array_key_exists($element->getName(), $values)) {
-                    $element->setValue($values[$element->getName()]);
-                }
-
             }
         }
     }
 
-    public function isValid(RequestInterface $request)
+    public function isValid()
     {
-        $retval = true;
+        $retVal = true;
 
-        if ($request->getParameter('isSend') != true) {
+        if (isset($this->data['isSend']) == false || $this->data['isSend'] != true) {
             return false;
         }
 
-        foreach ($this->elements as $element) {
-            if (in_array('Opf\Form\ElementInputInterface', class_implements($element)) === false) {
-                continue;
-            }
-
-            if ($element->isValid($request) == false) {
-                $retval = false;
+        foreach ($this->elements as $name => $element) {
+            if ($element instanceof ElementInterface) {
+                if (isset($this->data[$name]) && $element->isValid($this->data[$name]) == false) {
+                    $retVal = false;
+                }
             }
         }
 
-        return $retval;
+        return $retVal;
     }
 
     public function getData()
     {
         $data = array();
 
-        foreach ($this->elements as $element) {
-            if (in_array('Opf\Form\ElementInputInterface', class_implements($element)) === false) {
-                continue;
+        foreach ($this->elements as $name => $element) {
+            if ($element instanceof ElementInterface) {
+                $data[$name] = $element->getValue();
             }
-
-            $data[$element->getName()] = $element->getValue();
         }
 
         return $data;

@@ -2,19 +2,15 @@
 
 namespace Opf\Form\Elements;
 
-use Opf\Form\ElementAbstract;
-use Opf\Form\ElementRenderInterface;
-
-class Password extends ElementAbstract implements ElementRenderInterface
+class Password extends ElementAbstract
 {
     protected $name = '';
     protected $label = '';
 
     protected $rules = array();
 
-    public function __construct($name, $label, $placeholder = '')
+    public function __construct($label, $placeholder = '')
     {
-        $this->name        = $name;
         $this->label       = $label;
         $this->placeholder = $placeholder;
     }

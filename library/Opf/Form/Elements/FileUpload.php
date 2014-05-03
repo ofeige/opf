@@ -3,35 +3,20 @@
 namespace Opf\Form\Elements;
 
 
-use Opf\Form\ElementAbstract;
-use Opf\Form\ElementRenderInterface;
+use Opf\Validator\FileUploadSize;
 
-class FileUpload extends ElementAbstract implements ElementRenderInterface
+class FileUpload extends ElementAbstract
 {
     protected $label = '';
 
-    public function __construct($label, $name, $maxFileSize)
+    public function __construct($label, $maxFileSize = null)
     {
-        $this->name        = $name;
-        $this->label       = $label;
-        $this->maxFileSize = $maxFileSize;
-    }
+        $this->label = $label;
 
-    public function isValid(\Opf\Http\Request $request)
-    {
-        if (isset($_FILES[$this->name])) {
-            $this->value = $_FILES[$this->name];
+        if ($maxFileSize) {
+            $this->addRule(new FileUploadSize($maxFileSize));
+            $this->maxFileSize = $maxFileSize;
         }
-
-        $isValid = true;
-        foreach ($this->rules as $rule) {
-            if ($rule->isValid($request) === false) {
-                $isValid        = false;
-                $this->errors[] = $rule->getErrorMsg();
-            }
-        }
-
-        return $isValid;
     }
 
     public function __toString()
@@ -52,7 +37,7 @@ class FileUpload extends ElementAbstract implements ElementRenderInterface
         return sprintf($html,
                        $this->name,
                        $this->label,
-                       $this->maxFileSize,
+                       $this->maxFileSize * 1024,
                        $this->name,
                        $error
         );

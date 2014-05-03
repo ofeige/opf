@@ -18,11 +18,10 @@ class CommandResolver implements CommandResolverInterface
     }
 
     /**
-     * Ermittelt das auszuführende Kommando und gibt eine OICommand Klasse zurück
-     *
      * @param RequestInterface $request
      * @param ResponseInterface $response
-     * @return CommandInterface
+     * @return mixed
+     * @throws ClassNotFoundException
      */
     public function getCommand(RequestInterface $request, ResponseInterface $response)
     {

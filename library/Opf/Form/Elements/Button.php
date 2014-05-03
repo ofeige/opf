@@ -3,16 +3,12 @@
 namespace Opf\Form\Elements;
 
 
-use Opf\Form\ElementAbstract;
-use Opf\Form\ElementRenderInterface;
-
-class Button extends ElementAbstract implements ElementRenderInterface
+class Button extends ElementAbstract
 {
     protected $label = '';
 
-    public function __construct($label, $name = '', $value = '')
+    public function __construct($label, $value = '')
     {
-        $this->name  = $name;
         $this->label = $label;
         $this->value = $value;
     }

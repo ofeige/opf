@@ -16,4 +16,6 @@ interface RequestInterface
 
     public function getRemoteAddress();
 
+    public function getAllParameters();
+
 }

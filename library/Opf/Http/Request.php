@@ -27,6 +27,15 @@ class Request implements RequestInterface
         return null;
     }
 
+    public function getAllParameters()
+    {
+        if ($_FILES) {
+            return array_merge($_FILES, $this->parameters);
+        }
+
+        return $this->parameters;
+    }
+
     public function setParameter($name, $value)
     {
         $this->parameters[$name] = $value;

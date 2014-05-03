@@ -7,11 +7,6 @@ class Dispatcher
     private $handlers = array();
     static private $instance;
 
-    /**
-     * Return Instance of Dispatcher
-     *
-     * @return Dispatcher
-     */
     static public function getInstance()
     {
         if (self::$instance === null) {
@@ -38,19 +33,8 @@ class Dispatcher
         $this->handlers[$eventName][] = $handler;
     }
 
-    /**
-     * Trigger an Event
-     *
-     * @param mixed $event Use instance of event or a String for a Event name
-     * @param mixed $context
-     * @param mixed $info
-     * @return Event
-     */
     public function triggerEvent(Event $event)
     {
-        if (!$event instanceof Event) {
-            $event = new Event($event, $context, $info);
-        }
         $eventName = $event->getName();
         if (!isset($this->handlers[$eventName])) {
             return $event;

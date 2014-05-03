@@ -2,19 +2,14 @@
 
 namespace Opf\Form\Elements;
 
-use Opf\Form\ElementAbstract;
-use Opf\Form\ElementInputInterface;
-use Opf\Form\ElementRenderInterface;
-
-class Input extends ElementAbstract implements ElementRenderInterface, ElementInputInterface
+class Input extends ElementAbstract
 {
     protected $label = '';
 
     protected $rules = array();
 
-    public function __construct($name, $label, $placeholder = '')
+    public function __construct($label, $placeholder = '')
     {
-        $this->name        = $name;
         $this->label       = $label;
         $this->placeholder = $placeholder;
     }
