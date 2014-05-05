@@ -71,7 +71,12 @@ class Form
 
         foreach ($this->elements as $name => $element) {
             if ($element instanceof ElementInterface) {
-                if (isset($this->data[$name]) && $element->isValid($this->data[$name]) == false) {
+
+                if (isset($this->data[$name]) == false) {
+                    $this->data[$name] = '';
+                }
+
+                if ($element->isValid($this->data[$name]) == false) {
                     $retVal = false;
                 }
             }
