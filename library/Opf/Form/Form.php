@@ -7,6 +7,7 @@ use Opf\Form\Elements\ElementInterface;
 
 class Form
 {
+    public $valid = false;
     protected $elements = array();
     protected $data = array();
 
@@ -34,6 +35,13 @@ class Form
         }
 
         return $this->elements[$name];
+    }
+
+    public function deleteElement($name)
+    {
+        if (isset($this->elements[$name])) {
+            unset($this->elements[$name]);
+        }
     }
 
     /**
@@ -81,6 +89,8 @@ class Form
                 }
             }
         }
+
+        $this->valid = $retVal;
 
         return $retVal;
     }
