@@ -2,7 +2,11 @@
 
 namespace Opf\Auth\Driver;
 
-class Mysql implements DriverInterface
+use Opf\Event\Event;
+use Opf\Event\HandlerInterface;
+use Opf\Auth\AuthEventHandler;
+
+class Mysql implements DriverInterface, HandlerInterface
 {
     protected $modelName;
 
@@ -53,5 +57,13 @@ class Mysql implements DriverInterface
         }
 
         return $array;
+    }
+
+    public function handle(Event $event)
+    {
+        $context = $event->getContext();
+        $user = \Model::factory($this->modelName)->where('email', $context[AuthEventHandler::authName])->find_one();
+        $user->set_expr('lastlogin', 'NOW()');
+        $user->save();
     }
 }

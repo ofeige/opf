@@ -5,6 +5,7 @@ namespace Opf\Auth;
 use Opf\Auth\Driver\DriverInterface;
 use Opf\Event\Event;
 use Opf\Event\HandlerInterface;
+use Opf\Event\Dispatcher;
 use Opf\Http\RequestInterface;
 use Opf\Http\ResponseInterface;
 use Opf\Session\SessionInterface;
@@ -24,11 +25,11 @@ class AuthEventHandler implements HandlerInterface
     const authRoles    = 'auth::roles';
 
     public function __construct(
-       DriverInterface $driver,
-       SessionInterface $session,
-       RequestInterface $request,
-       ResponseInterface $response,
-       ViewInterface $login
+        DriverInterface $driver,
+        SessionInterface $session,
+        RequestInterface $request,
+        ResponseInterface $response,
+        ViewInterface $login
     )
     {
         $this->driver   = $driver;
@@ -59,17 +60,17 @@ class AuthEventHandler implements HandlerInterface
 
         /** check if user is already logged in, and no role is needed */
         if ($this->session->getParameter(self::authSignin) == true &&
-           $this->session->getParameter(self::authName) != '' &&
-           count($roles) == 0
+            $this->session->getParameter(self::authName) != '' &&
+            count($roles) == 0
         ) {
             return true;
         }
 
         /** check if user is already logged in, and role is needed */
         if ($this->session->getParameter(self::authSignin) == true &&
-           $this->session->getParameter(self::authName) != '' &&
-           count($roles) > 0 &&
-           count(array_intersect(
+            $this->session->getParameter(self::authName) != '' &&
+            count($roles) > 0 &&
+            count(array_intersect(
                     $this->session->getParameter(self::authRoles),
                     $roles)) > 0
         ) {
@@ -78,9 +79,9 @@ class AuthEventHandler implements HandlerInterface
 
         /** test validation of username & password */
         $auth = $this->driver->isValid(
-                             $this->request->getParameter(self::authName),
-                             $this->request->getParameter(self::authPassword),
-                             $roles
+            $this->request->getParameter(self::authName),
+            $this->request->getParameter(self::authPassword),
+            $roles
         );
 
         /** check if we are log in now */
@@ -99,7 +100,9 @@ class AuthEventHandler implements HandlerInterface
         $this->session->setParameter(self::authName, $this->request->getParameter(self::authName));
         $this->session->setParameter(self::authSignin, true);
         $this->session->setParameter(self::authRoles,
-                                     $this->driver->getRoles($this->request->getParameter(self::authName)));
+            $this->driver->getRoles($this->request->getParameter(self::authName)));
+
+        Dispatcher::getInstance()->triggerEvent(new Event('onLoginSuccess', array(self::authName => $this->request->getParameter(self::authName))));
 
         return true;
     }
