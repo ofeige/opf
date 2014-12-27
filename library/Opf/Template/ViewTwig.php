@@ -27,13 +27,26 @@ class ViewTwig implements ViewInterface
 
     public function render(RequestInterface $request, ResponseInterface $response)
     {
+        $timing = microtime(true);
+
         $this->assign('cmd', $request->getParameter('cmd'));
         $this->assign('app', $request->getParameter('app'));
 
         $loader = new Twig_Loader_Filesystem(OPF_APPLICATION_PATH . "/views/");
-        $twig   = new Twig_Environment($loader, array('debug' => true));
+        $twig = new Twig_Environment(
+            $loader,
+            array(
+                'debug'         => true,
+                'cache'         => OPF_APPLICATION_PATH . "/data/cache/",
+                'auto_reload'   => true,
+                'optimizations' => -1
+            )
+        );
         $twig->addExtension(new \Twig_Extension_Debug());
         $data = $twig->render("{$this->template}.twig", $this->vars);
+
+        $response->addHeader('X-OPF-TWIG-TIMING', microtime(true) - $timing);
+
         $response->write($data);
     }
 
@@ -49,7 +62,7 @@ class ViewTwig implements ViewInterface
     public function __call($methodName, $args)
     {
         $helper = $this->loadViewHelper($methodName);
-        $val    = $helper->execute($args);
+        $val = $helper->execute($args);
 
         return $val;
     }
@@ -59,7 +72,8 @@ class ViewTwig implements ViewInterface
         $helperName = ucfirst($helper);
         if (!isset($this->helpers[$helper])) {
             $className = "{$helperName}";
-            $fileName  = OPF_APPLICATION_PATH . "/views/helpers/{$className}.php";
+            $fileName
+                = OPF_APPLICATION_PATH . "/views/helpers/{$className}.php";
             if (file_exists($fileName) === false) {
                 throw new \Exception("File not found {$fileName}");
             }
