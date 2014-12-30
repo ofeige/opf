@@ -2,6 +2,7 @@
 
 namespace Opf\Template;
 
+use Opf\Bootstrap\Bootstrap;
 use Opf\Http\RequestInterface;
 use Opf\Http\ResponseInterface;
 use Twig_Environment;
@@ -32,12 +33,12 @@ class ViewTwig implements ViewInterface
         $this->assign('cmd', $request->getParameter('cmd'));
         $this->assign('app', $request->getParameter('app'));
 
-        $loader = new Twig_Loader_Filesystem(OPF_APPLICATION_PATH . "/views/");
+        $loader = new Twig_Loader_Filesystem(Bootstrap::getPathView());
         $twig = new Twig_Environment(
             $loader,
             array(
                 'debug'         => true,
-                'cache'         => OPF_APPLICATION_PATH . "/data/cache/",
+                'cache'         => Bootstrap::getPathCache(),
                 'auto_reload'   => true,
                 'optimizations' => -1
             )
@@ -73,7 +74,7 @@ class ViewTwig implements ViewInterface
         if (!isset($this->helpers[$helper])) {
             $className = "{$helperName}";
             $fileName
-                = OPF_APPLICATION_PATH . "/views/helpers/{$className}.php";
+                = Bootstrap::getPathView() . "/helpers/{$className}.php";
             if (file_exists($fileName) === false) {
                 throw new \Exception("File not found {$fileName}");
             }

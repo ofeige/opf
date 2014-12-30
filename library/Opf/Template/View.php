@@ -2,6 +2,7 @@
 
 namespace Opf\Template;
 
+use Opf\Bootstrap\Bootstrap;
 use Opf\Http\RequestInterface;
 use Opf\Http\ResponseInterface;
 
@@ -26,7 +27,7 @@ class View implements ViewInterface
     {
         ob_start();
 
-        $uri = OPF_APPLICATION_PATH . "/views/{$this->template}.phtml";
+        $uri = Bootstrap::getPathView() . "/{$this->template}.phtml";
         if (file_exists($uri) === false) {
             throw new \Exception("File not found " . $uri);
         }
@@ -59,7 +60,7 @@ class View implements ViewInterface
         $helperName = ucfirst($helper);
         if (!isset($this->helpers[$helper])) {
             $className = "{$helperName}";
-            $fileName  = OPF_APPLICATION_PATH . "/views/helpers/{$className}.php";
+            $fileName  = Bootstrap::getPathView() . "/helpers/{$className}.php";
             if (file_exists($fileName) === false) {
                 throw new \Exception("File not found {$fileName}");
             }
