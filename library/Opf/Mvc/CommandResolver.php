@@ -2,6 +2,7 @@
 
 namespace Opf\Mvc;
 
+use Opf\Exception\ClassNotFoundException;
 use Opf\Exception\FileNotFoundException;
 use Opf\Http\RequestInterface;
 use Opf\Http\ResponseInterface;
