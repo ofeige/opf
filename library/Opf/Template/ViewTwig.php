@@ -30,8 +30,8 @@ class ViewTwig implements ViewInterface
     {
         $timing = microtime(true);
 
-        $this->assign('cmd', $request->getParameter('cmd'));
-        $this->assign('app', $request->getParameter('app'));
+        $this->assign('action', $request->getParameter('action'));
+        $this->assign('controller', $request->getParameter('controller'));
 
         $loader = new Twig_Loader_Filesystem(Bootstrap::getPathView());
         $twig = new Twig_Environment(

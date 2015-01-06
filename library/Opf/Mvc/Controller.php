@@ -29,10 +29,10 @@ class Controller implements ControllerInterface
          * test about ?cmd=xxx to choose the right controller
          * if cmd not found, we use cmd=main as default
          */
-        if ($request->issetParameter('cmd') === false) {
+        if ($request->issetParameter('action') === false) {
             $cmd = 'main';
         } else {
-            $cmd = $request->getParameter('cmd');
+            $cmd = $request->getParameter('action');
         }
 
         if (method_exists($command, $cmd) === false) {
