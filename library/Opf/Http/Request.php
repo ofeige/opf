@@ -76,4 +76,9 @@ class Request implements RequestInterface
     {
         return $_SERVER['REMOTE_ADDR'];
     }
+
+    public function getUri()
+    {
+        return $_SERVER['REQUEST_URI'];
+    }
 }

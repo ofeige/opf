@@ -18,4 +18,10 @@ interface RequestInterface
 
     public function getAllParameters();
 
+    public function getUri();
+
+    public function setParameter($name, $value);
+
+    public function setParameterFromArray(array $values);
+
 }
