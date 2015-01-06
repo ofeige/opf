@@ -86,7 +86,7 @@ class AuthEventHandler implements HandlerInterface
 
         /** check if we are log in now */
         if ($auth === false) {
-            $this->login->assign('action', '/?app=' . $this->request->getParameter('app'));
+            $this->login->assign('uri', $this->request->getUri());
             $this->login->assign('fieldUser', self::authName);
             $this->login->assign('valueUser', $this->request->getParameter(self::authName));
             $this->login->assign('fieldPassword', self::authPassword);
