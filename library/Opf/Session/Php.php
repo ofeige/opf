@@ -8,15 +8,40 @@ class Php implements SessionInterface, \ArrayAccess
 
     public function __construct()
     {
-        // Start the session suppress error if already started
+        $this->start();
+    }
+
+    public function start($lifetime = 0)
+    {
         if (session_id() == '') {
-            @session_start();
+
+            session_set_cookie_params($lifetime);
+            session_start();
             if (session_id() == '') {
                 throw new Exception('Cannot start session');
             }
 
             $this->container = & $_SESSION;
         }
+    }
+
+    public function setLifetime($lifetime)
+    {
+        session_set_cookie_params($lifetime);
+        session_regenerate_id(true);
+    }
+
+    public function destroy()
+    {
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+            );
+        }
+
+        session_destroy();
     }
 
     public function issetParameter($name)

@@ -46,7 +46,7 @@ class AuthEventHandler implements HandlerInterface
             $this->session->unsetParameter(self::authName);
             $this->session->unsetParameter(self::authSignin);
 
-            session_destroy();
+            $this->session->destroy();
         }
 
         /**
@@ -90,6 +90,8 @@ class AuthEventHandler implements HandlerInterface
             $this->login->assign('fieldUser', self::authName);
             $this->login->assign('valueUser', $this->request->getParameter(self::authName));
             $this->login->assign('fieldPassword', self::authPassword);
+            $this->login->assign('fieldRememberMeName', 'remember-me');
+            $this->login->assign('fieldRememberMeValue', 1209600);
             $this->login->render($this->request, $this->response);
 
             $event->cancel();
@@ -97,6 +99,8 @@ class AuthEventHandler implements HandlerInterface
             return false;
         }
 
+        $this->session->start($this->request->getParameter('remember-me'));
+        $this->session->setLifetime($this->request->getParameter('remember-me'));
         $this->session->setParameter(self::authName, $this->request->getParameter(self::authName));
         $this->session->setParameter(self::authSignin, true);
         $this->session->setParameter(self::authRoles,
