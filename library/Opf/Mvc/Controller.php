@@ -39,6 +39,10 @@ class Controller implements ControllerInterface
             throw new \Exception('There is no method "' . $cmd . '"', 404);
         }
 
+        if (extension_loaded ('newrelic')) {
+            newrelic_name_transaction (join('', array_slice(explode('\\', get_class($command)), -1)) . '/' . $cmd);
+        }
+
         $command->$cmd();
 
         $this->postFilters->processFilters($request, $response);

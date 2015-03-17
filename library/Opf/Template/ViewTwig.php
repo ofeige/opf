@@ -19,6 +19,10 @@ class ViewTwig implements ViewInterface
     public function __construct($template)
     {
         $this->template = $template;
+
+        if (extension_loaded ('newrelic')) {
+            newrelic_add_custom_tracer ('ViewTwig::render');
+        }
     }
 
     public function assign($name, $value)
